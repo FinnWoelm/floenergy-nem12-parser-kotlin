@@ -57,5 +57,40 @@ class Nem12ParserTest {
                 ), readings[47]
             )
         }
+
+        @Test
+        fun testItYieldsCorrectValuesForLast300Record() {
+            val parser = Nem12Parser(FileInputStream("sample.csv"))
+            // Get the readings from the last `300` record
+            val readings = parser.asSequence().toList().takeLast(48)
+
+            // The first reading is for the period ending at midnight + interval period (00h30 in this case).
+            // Refer to page 7 in reference document.
+            assertEquals(
+                MeterReading(
+                    nmi = "NEM1201009",
+                    timestamp = LocalDateTime.of(2005, 3, 4, 0, 30),
+                    consumption = BigDecimal(0),
+                ), readings[0]
+            )
+
+            assertEquals(
+                MeterReading(
+                    nmi = "NEM1201009",
+                    timestamp = LocalDateTime.of(2005, 3, 4, 7, 0),
+                    consumption = BigDecimal("0.415"),
+                ), readings[13]
+            )
+
+            // The last reading is for the period ending at midnight (00h00 on the next day).
+            // Refer to page 7 in reference document.
+            assertEquals(
+                MeterReading(
+                    nmi = "NEM1201009",
+                    timestamp = LocalDateTime.of(2005, 3, 5, 0, 0),
+                    consumption = BigDecimal("0.355"),
+                ), readings[47]
+            )
+        }
     }
 }
