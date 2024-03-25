@@ -29,7 +29,7 @@ create table meter_readings (
 ## Plan
 
 - [x] Set up basic repo
-- [ ] Set up placeholder classes and write main test case
+- [x] Set up placeholder classes and write main test case
 - [ ] Write MeterReading class that can be used to generate SQL insert statements
 - [ ] Write Nem12Parser class that can parse NEM12 files and yield meter readings
 - [ ] Write script that takes in a NEM12 file and outputs SQL insert statements
