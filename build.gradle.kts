@@ -1,5 +1,6 @@
 plugins {
     kotlin("jvm") version "1.9.23"
+    application
 }
 
 repositories {
@@ -14,6 +15,10 @@ dependencies {
     implementation("org.slf4j:slf4j-nop:2.0.12")
     implementation("org.jooq:jooq:3.19.6")
     implementation("org.xerial:sqlite-jdbc:3.45.2.0")
+}
+
+application {
+    mainClass = "ParseFileKt"
 }
 
 tasks.test {
