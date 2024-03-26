@@ -1,5 +1,14 @@
+import org.jooq.DSLContext
+import org.jooq.SQLDialect
+import org.jooq.conf.ParamType
+import org.jooq.impl.DSL
+import org.jooq.impl.DSL.field
+import org.jooq.impl.DSL.table
 import java.math.BigDecimal
 import java.time.LocalDateTime
+
+
+val dsl: DSLContext = DSL.using(SQLDialect.SQLITE)
 
 /**
  * A single reading from a meter.
@@ -17,6 +26,10 @@ data class MeterReading(val nmi: String, val timestamp: LocalDateTime, val consu
      * @return SQL insert statement
      */
     fun toSql(): String {
-        return "TODO"
+        val query = dsl.insertInto(
+            table("meter_readings"), field("nmi"), field("timestamp"), field("consumption")
+        ).values(nmi, timestamp, consumption)
+
+        return query.getSQL(ParamType.INLINED) + ";"
     }
 }
