@@ -23,6 +23,8 @@ create table meter_readings (
 
 - [Plan](#plan)
     - [Stretch goals](#stretch-goals)
+- [How to use](#how-to-use)
+- [Testing](#testing)
 - [Notes](#notes)
 - [Reference document](#reference-document)
 
@@ -36,8 +38,41 @@ create table meter_readings (
 
 ### Stretch goals
 
-- [ ] README: Add instructions for installation, running, testing, etc...
+- [x] README: Add instructions for installation, running, testing, etc...
 - [ ] Set up Docker container to allow users without Java to run code & tests
+
+## How to use
+
+The code is written in Kotlin. Dependencies are managed with Gradle.
+
+`ParseFile.kt` serves as an entrypoint for parsing a NEM12 file and generating the corresponding SQL insert statements.
+
+```bash
+$ gradle run --args sample.csv
+
+# INSERT INTO "meter_readings" ("nmi","timestamp","consumption") VALUES ('NEM1201009','2005-03-01T00:30:00',0);
+# INSERT INTO "meter_readings" ("nmi","timestamp","consumption") VALUES ('NEM1201009','2005-03-01T01:00:00',0);
+# INSERT INTO "meter_readings" ("nmi","timestamp","consumption") VALUES ('NEM1201009','2005-03-01T01:30:00',0);
+# ...
+```
+
+If you are working with Kotlin code yourself, you may prefer to directly use the Nem12Parser class that is available
+in `src/main/kotlin/Nem12Parser.kt`:
+
+```kotlin
+FileInputStream("sample.csv").use { input ->
+    val parser = Nem12Parser(input)
+    while (parser.hasNext()) {
+        val insertStmt = parser.next().toSql()
+        // dsl.execute(insertStmt)
+        // ...
+    }
+}
+```
+
+## Testing
+
+A few unit and integration tests were written with JUnit. To run the tests, simply run the `gradle :test` command.
 
 ## Notes
 
